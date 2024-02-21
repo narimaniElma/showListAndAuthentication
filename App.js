@@ -4,8 +4,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NativeBaseProvider, extendTheme } from "native-base";
-import Colors from "./app/helpers/Colors";
-import { SignIn, SignUp } from "./app/screens";
+import Colors from "./src/helpers/Colors";
+import { SignIn, SignUp } from "./src/screens";
 
 const Stack = createStackNavigator();
 
