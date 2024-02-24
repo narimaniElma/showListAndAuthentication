@@ -1,15 +1,31 @@
-import { useState, memo } from "react";
+// import { memo } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 import { CustomInput, CustomBtn } from "../../components";
 import { MainLayout } from "../../layout";
 
+const schemaValidations = yup.object({
+  username: yup.string().required("Username is required."),
+  password: yup
+    .string()
+    .required("Password is required.")
+    .min(5, "Password should be at least 5 characters"),
+});
+
 const SignInScreen = ({ navigation }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schemaValidations),
+  });
 
-  const onSignInPressed = () => {
+  const onSignInPressed = (data) => {
     //validate user
-
+    console.log(data);
     navigation.navigate("Home");
   };
   const onForgotPassword = () => {
@@ -27,18 +43,35 @@ const SignInScreen = ({ navigation }) => {
 
   return (
     <MainLayout Scrollable>
-      <CustomInput
-        placeholder="Username"
-        valu={username}
-        setValue={setUsername}
+      <Controller
+        control={control}
+        name="username"
+        render={({ field: { onChange } }) => (
+          <CustomInput
+            placeholder="Username"
+            onChangeText={onChange}
+            errorMessage={errors.username?.message}
+          />
+        )}
       />
-      <CustomInput
-        placeholder="Password"
-        type="password"
-        valu={password}
-        setValue={setPassword}
+      <Controller
+        control={control}
+        name="password"
+        render={({ field: { onChange } }) => (
+          <CustomInput
+            placeholder="Password"
+            onChangeText={onChange}
+            secureTextEntry
+            errorMessage={errors.password?.message}
+          />
+        )}
       />
-      <CustomBtn text="Sign in" onPress={onSignInPressed} mb='0'/>
+
+      <CustomBtn
+        text="Sign in"
+        onPress={handleSubmit(onSignInPressed)}
+        mb="0"
+      />
 
       <CustomBtn text="Forgot your password" link onPress={onForgotPassword} />
 
@@ -62,4 +95,4 @@ const SignInScreen = ({ navigation }) => {
   );
 };
 
-export default memo(SignInScreen);
+export default SignInScreen;

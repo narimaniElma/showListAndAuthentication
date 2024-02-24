@@ -2,9 +2,10 @@ import { Button } from "native-base";
 
 const CustomBtn = ({
   text,
-  width = "100%",
+  width = "full",
   onPress,
   mb = "5",
+  py = 4,
   link = false,
   background = "primary.500",
   variant,
@@ -15,6 +16,7 @@ const CustomBtn = ({
     width={link ? "" : width}
     size="lg"
     mb={mb}
+    py = { variant == "outline" ? '3' : link ? '1' : py}
     pl={link ? 0 : ''}
     rounded="md"
     onPress={onPress}

@@ -1,43 +1,73 @@
-import { useState } from "react";
+// import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 import { Title, CustomInput, CustomBtn } from "../../components";
 import { MainLayout } from "../../layout";
 
-const NewPasswordScreen = ({ navigation }) => {
-  const [code, setCode] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+const schemaValidations = yup.object({
+  code: yup.string().required("Code is required."),
+  password: yup
+    .string()
+    .required("Password is required.")
+    .min(5, "Password should be at least 5 characters"),
+});
 
-  const onSubmitPressed = () => {
-    navigation.navigate('Home');
+const NewPasswordScreen = ({ navigation }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schemaValidations),
+  });
+
+  const onSubmitPressed = (data) => {
+    console.log(data);
+
+    navigation.navigate("Home");
   };
   const onSignInPressed = () => {
-    navigation.navigate('SignIn');
+    navigation.navigate("SignIn");
   };
 
   return (
     <MainLayout Scrollable>
       <Title text="Reset your password" />
 
-      <CustomInput
-        placeholder="Code"
-        valu={code}
-        setValue={setCode}
+      <Controller
+        control={control}
+        name="code"
+        render={({ field: { onChange } }) => (
+          <CustomInput
+            placeholder="Code"
+            onChangeText={onChange}
+            errorMessage={errors.code?.message}
+          />
+        )}
       />
-      <CustomInput
-        placeholder="Enter your new password"
-        valu={newPassword}
-        setValue={setNewPassword}
-        mb='10'
+
+      <Controller
+        control={control}
+        name="password"
+        render={({ field: { onChange } }) => (
+          <CustomInput
+            placeholder="Enter your new password"
+            onChangeText={onChange}
+            errorMessage={errors.password?.message}
+            mb="10"
+          />
+        )}
       />
-     
-      <CustomBtn text="Submit" onPress={onSubmitPressed} />
+
+      <CustomBtn text="Submit" onPress={handleSubmit(onSubmitPressed)} />
 
       <CustomBtn
-        text='Back to Sign in'
+        text="Back to Sign in"
         variant="outline"
         onPress={onSignInPressed}
       />
-
     </MainLayout>
   );
 };

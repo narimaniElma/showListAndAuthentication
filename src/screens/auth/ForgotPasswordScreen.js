@@ -1,12 +1,27 @@
-import { useState, memo } from "react";
+// import { useState, memo } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 import { Title, CustomInput, CustomBtn } from "../../components";
 import { MainLayout } from "../../layout";
 
-const ForgotPasswordScreen = ({ navigation }) => {
-  const [username, setUsername] = useState("");
+const schemaValidations = yup.object({
+  username: yup.string().required("Username is required."),
+});
 
-  const onSendPressed = () => {
+const ForgotPasswordScreen = ({ navigation }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schemaValidations),
+  });
+
+  const onSendPressed = (data) => {
+    console.log(data);
+
     navigation.navigate('NewPassword');
   };
   const onSignInPressed = () => {
@@ -17,13 +32,19 @@ const ForgotPasswordScreen = ({ navigation }) => {
     <MainLayout Scrollable>
       <Title text="Reset your password" />
 
-      <CustomInput
-        placeholder="Username"
-        valu={username}
-        setValue={setUsername}
+      <Controller
+        control={control}
+        name="username"
+        render={({ field: { onChange } }) => (
+          <CustomInput
+            placeholder="Username"
+            onChangeText={onChange}
+            errorMessage={errors.username?.message}
+          />
+        )}
       />
      
-      <CustomBtn text="Send" onPress={onSendPressed} />
+      <CustomBtn text="Send" onPress={handleSubmit(onSendPressed)} />
 
       <CustomBtn
         text='Back to Sign in'
@@ -35,4 +56,4 @@ const ForgotPasswordScreen = ({ navigation }) => {
   );
 };
 
-export default memo(ForgotPasswordScreen);
+export default ForgotPasswordScreen;
