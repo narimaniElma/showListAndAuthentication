@@ -5,6 +5,7 @@ import * as yup from "yup";
 
 import { Title, CustomInput, CustomBtn } from "../../components";
 import { MainLayout } from "../../layout";
+import { AuthIcon } from "../../icons";
 
 const schemaValidations = yup.object({
   username: yup.string().required("Username is required."),
@@ -40,6 +41,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
             placeholder="Username"
             onChangeText={onChange}
             errorMessage={errors.username?.message}
+            InputLeftElement={<AuthIcon name="person" />}
           />
         )}
       />
