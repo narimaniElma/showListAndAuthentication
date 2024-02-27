@@ -4,6 +4,7 @@ import { NativeBaseProvider, extendTheme } from "native-base";
 
 import Colors from "./src/helpers/Colors";
 import Navigation from "./src/navigation";
+import { AuthProvider } from "./src/contexts/AuthContext";
 
 export default function App() {
   const theme = extendTheme({
@@ -14,7 +15,9 @@ export default function App() {
     <>
       <NativeBaseProvider theme={theme}>
         <StatusBar style="auto" />
+        <AuthProvider>
           <Navigation />
+        </AuthProvider>
       </NativeBaseProvider>
     </>
   );

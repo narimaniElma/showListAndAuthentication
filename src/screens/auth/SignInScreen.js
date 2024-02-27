@@ -5,6 +5,7 @@ import * as yup from "yup";
 
 import { CustomInput, CustomBtn } from "../../components";
 import { MainLayout } from "../../layout";
+import { useAuth } from "../../contexts/AuthContext";
 
 const schemaValidations = yup.object({
   username: yup.string().required("Username is required."),
@@ -15,6 +16,7 @@ const schemaValidations = yup.object({
 });
 
 const SignInScreen = ({ navigation }) => {
+  const {login, register} = useAuth();
   const {
     control,
     handleSubmit,
@@ -23,15 +25,29 @@ const SignInScreen = ({ navigation }) => {
     resolver: yupResolver(schemaValidations),
   });
 
-  const onSignInPressed = (data) => {
-    //validate user
+  const onSignInPressed = async (data) => {
+    const result = await login(data.username, data.password);
+
+    if (result && result.error) {
+      alert(result.msg);
+    } else {
+      navigation.navigate("Home");
+    }
+
     console.log(data);
-    navigation.navigate("Home");
   };
   const onForgotPassword = () => {
     navigation.navigate("ForgotPassword");
   };
   const onSignUpPressed = () => {
+    // const result = await register(data.username, data.password);
+
+    // if (result && result.error) {
+    //   alert(result.msg);
+    // } else {
+    //   onSignInPressed();
+    //   navigation.navigate("SignUp");
+    // }
     navigation.navigate("SignUp");
   };
   const onSignInFacebook = () => {
