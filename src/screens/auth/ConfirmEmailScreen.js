@@ -18,6 +18,22 @@ const ConfirmEmailScreen = ({ navigation }) => {
     resolver: yupResolver(schemaValidations),
   });
 
+  const InputController = ({ name, placeholder}) => {
+    return (
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange } }) => (
+          <CustomInput
+            placeholder={placeholder}
+            onChangeText={onChange}
+            errorMessage={errors.name?.message}
+          />
+        )}
+      />
+    );
+  };
+
   const onConfirmPressed = (data) => {
     console.log(data);
 
@@ -34,17 +50,7 @@ const ConfirmEmailScreen = ({ navigation }) => {
     <MainLayout Scrollable>
       <Title text="Confirm your email" />
 
-      <Controller
-        control={control}
-        name="code"
-        render={({ field: { onChange } }) => (
-          <CustomInput
-            placeholder="Enter your confirmation code"
-            onChangeText={onChange}
-            errorMessage={errors.code?.message}
-          />
-        )}
-      />
+      <InputController name="code" placeholder="Enter your confirmation code" />
 
       <CustomBtn text="Confirm" onPress={handleSubmit(onConfirmPressed)} />
 

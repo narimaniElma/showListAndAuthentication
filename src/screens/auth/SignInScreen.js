@@ -1,10 +1,11 @@
-// import { memo } from "react";
+import { useCallback, memo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import { CustomInput, CustomBtn } from "../../components";
 import { MainLayout } from "../../layout";
+import { AuthIcon } from "../../icons";
 
 const schemaValidations = yup.object({
   username: yup.string().required("Username is required."),
@@ -22,11 +23,28 @@ const SignInScreen = ({ navigation }) => {
   } = useForm({
     resolver: yupResolver(schemaValidations),
   });
+  
+  const InputController = ({ name, placeholder, inputLeftElement, errorMessage}) => {
+    return (
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange } }) => (
+          <CustomInput
+            placeholder={placeholder}
+            onChangeText={onChange}
+            errorMessage={errorMessage}
+            InputLeftElement={inputLeftElement}
+          />
+        )}
+      />
+    );
+  };
 
   const onSignInPressed = (data) => {
-    //validate user
     console.log(data);
     navigation.navigate("Home");
+    //validate user
   };
   const onForgotPassword = () => {
     navigation.navigate("ForgotPassword");
@@ -43,29 +61,9 @@ const SignInScreen = ({ navigation }) => {
 
   return (
     <MainLayout Scrollable>
-      <Controller
-        control={control}
-        name="username"
-        render={({ field: { onChange } }) => (
-          <CustomInput
-            placeholder="Username"
-            onChangeText={onChange}
-            errorMessage={errors.username?.message}
-          />
-        )}
-      />
-      <Controller
-        control={control}
-        name="password"
-        render={({ field: { onChange } }) => (
-          <CustomInput
-            placeholder="Password"
-            onChangeText={onChange}
-            secureTextEntry
-            errorMessage={errors.password?.message}
-          />
-        )}
-      />
+      <InputController name="username" placeholder="Username" InputLeftElement={<AuthIcon name="person" />} errorMessage={errors.username?.message} />
+      <InputController name="password" placeholder="Password" errorMessage={errors.password?.message} />
+    
 
       <CustomBtn
         text="Sign in"
@@ -75,7 +73,7 @@ const SignInScreen = ({ navigation }) => {
 
       <CustomBtn text="Forgot your password" link onPress={onForgotPassword} />
 
-      <CustomBtn
+      {/* <CustomBtn
         text="Sign in with google"
         onPress={onSignInGoogle}
         variant="outline"
@@ -84,7 +82,7 @@ const SignInScreen = ({ navigation }) => {
         text="Sign in with facebook"
         onPress={onSignInFacebook}
         variant="outline"
-      />
+      /> */}
 
       <CustomBtn
         text={`Don't have an accunt? Create one`}
@@ -95,4 +93,4 @@ const SignInScreen = ({ navigation }) => {
   );
 };
 
-export default SignInScreen;
+export default memo(SignInScreen);

@@ -23,6 +23,22 @@ const NewPasswordScreen = ({ navigation }) => {
     resolver: yupResolver(schemaValidations),
   });
 
+  const InputController = ({ name, placeholder}) => {
+    return (
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange } }) => (
+          <CustomInput
+            placeholder={placeholder}
+            onChangeText={onChange}
+            errorMessage={errors.name?.message}
+          />
+        )}
+      />
+    );
+  };
+
   const onSubmitPressed = (data) => {
     console.log(data);
 
@@ -36,30 +52,8 @@ const NewPasswordScreen = ({ navigation }) => {
     <MainLayout Scrollable>
       <Title text="Reset your password" />
 
-      <Controller
-        control={control}
-        name="code"
-        render={({ field: { onChange } }) => (
-          <CustomInput
-            placeholder="Code"
-            onChangeText={onChange}
-            errorMessage={errors.code?.message}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="password"
-        render={({ field: { onChange } }) => (
-          <CustomInput
-            placeholder="Enter your new password"
-            onChangeText={onChange}
-            errorMessage={errors.password?.message}
-            mb="10"
-          />
-        )}
-      />
+      <InputController name="code" placeholder="Code" />
+      <InputController name="password" placeholder="Enter your new password" />
 
       <CustomBtn text="Submit" onPress={handleSubmit(onSubmitPressed)} />
 

@@ -13,7 +13,6 @@ export default function App() {
   return (
     <>
       <NativeBaseProvider theme={theme}>
-        <StatusBar style="auto" />
           <Navigation />
       </NativeBaseProvider>
     </>

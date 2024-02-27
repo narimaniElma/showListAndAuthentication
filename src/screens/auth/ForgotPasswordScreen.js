@@ -20,6 +20,23 @@ const ForgotPasswordScreen = ({ navigation }) => {
     resolver: yupResolver(schemaValidations),
   });
 
+  const InputController = ({ name, placeholder}) => {
+    return (
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange } }) => (
+          <CustomInput
+            placeholder={placeholder}
+            onChangeText={onChange}
+            errorMessage={errors.name?.message}
+            InputLeftElement={<AuthIcon name="person" />}
+          />
+        )}
+      />
+    );
+  };
+
   const onSendPressed = (data) => {
     console.log(data);
 
@@ -33,18 +50,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
     <MainLayout Scrollable>
       <Title text="Reset your password" />
 
-      <Controller
-        control={control}
-        name="username"
-        render={({ field: { onChange } }) => (
-          <CustomInput
-            placeholder="Username"
-            onChangeText={onChange}
-            errorMessage={errors.username?.message}
-            InputLeftElement={<AuthIcon name="person" />}
-          />
-        )}
-      />
+      <InputController name="username" placeholder="Username" />
      
       <CustomBtn text="Send" onPress={handleSubmit(onSendPressed)} />
 

@@ -1,4 +1,4 @@
-// import { useState, memo } from "react";
+import { memo } from "react";
 import { Text } from "native-base";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -6,6 +6,7 @@ import * as yup from "yup";
 
 import { Title, CustomInput, CustomBtn } from "../../components";
 import { MainLayout } from "../../layout";
+import { AuthIcon } from "../../icons";
 
 const schemaValidations = yup.object({
   username: yup
@@ -30,6 +31,23 @@ const {
   } = useForm({
     resolver: yupResolver(schemaValidations),
   });
+
+  const InputController = ({ name, placeholder, inputLeftElement}) => {
+    return (
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange } }) => (
+          <CustomInput
+            placeholder={placeholder}
+            onChangeText={onChange}
+            errorMessage={errors.name?.message}
+            InputLeftElement={inputLeftElement}
+          />
+        )}
+      />
+    );
+  };
 
   const onRegisterPressed = (data) => {
     console.log(data);
@@ -56,50 +74,10 @@ const {
     <MainLayout Scrollable>
       <Title text="Create an account" />
 
-      <Controller
-        control={control}
-        name="username"
-        render={({ field: { onChange } }) => (
-          <CustomInput
-            placeholder="Username"
-            onChangeText={onChange}
-            errorMessage={errors.username?.message}
-          />
-        )}
-      />
-      <Controller
-        control={control}
-        name="email"
-        render={({ field: { onChange } }) => (
-          <CustomInput placeholder="Email" onChangeText={onChange} errorMessage={errors.email?.message} />
-        )}
-      />
-      <Controller
-        control={control}
-        name="password"
-        render={({ field: { onChange } }) => (
-          <CustomInput
-            placeholder="Password"
-            onChangeText={onChange}
-            secureTextEntry
-            errorMessage={errors.password?.message}
-            mb="5"
-          />
-        )}
-      />
-      <Controller
-        control={control}
-        name="password_confirm"
-        render={({ field: { onChange } }) => (
-          <CustomInput
-            placeholder="Reoeat Password"
-            onChangeText={onChange}
-            secureTextEntry
-            errorMessage={errors.password_confirm?.message}
-            mb="5"
-          />
-        )}
-      />
+      <InputController name="username" placeholder="Username" InputLeftElement={<AuthIcon name="person" />} />
+      <InputController name="email" placeholder="Email" InputLeftElement={<AuthIcon name="email" />} />
+      <InputController name="password" placeholder="Password" />
+      <InputController name="password_confirm" placeholder="Reoeat Password" />
 
       <CustomBtn text="Register" onPress={handleSubmit(onRegisterPressed)} mb="2" />
 
@@ -113,7 +91,7 @@ const {
           Privacy Policy
         </Text>
       </Text>
-
+{/* 
       <CustomBtn
         text="Sign in with google"
         variant="outline"
@@ -124,7 +102,7 @@ const {
         text="Sign in with facebook"
         variant="outline"
         onPress={onSignInFacebook}
-      />
+      /> */}
 
       <CustomBtn
         text="Have an account? Sign in"
@@ -135,4 +113,4 @@ const {
   );
 };
 
-export default SignUpScreen;
+export default memo(SignUpScreen);

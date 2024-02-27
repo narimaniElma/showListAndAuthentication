@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Center, Image, Text } from "native-base";
 import { MainLayout } from "../layout";
 
@@ -9,4 +10,4 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
-export default HomeScreen;
+export default memo(HomeScreen);
